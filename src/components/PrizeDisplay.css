@@ -1,0 +1,36 @@
+.prize-display {
+  text-align: center;
+  animation: fadeIn 0.4s ease-out;
+  width: 100%;
+  max-width: 500px;
+}
+
+.prize-progress {
+  font-size: 0.85rem;
+  color: var(--text-dimmed);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+
+.prize-label {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 4px;
+  color: var(--neon-pink);
+  text-shadow: var(--glow-pink);
+  margin-bottom: 8px;
+}
+
+.prize-name {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+@media (max-width: 600px) {
+  .prize-name {
+    font-size: 1.4rem;
+  }
+}

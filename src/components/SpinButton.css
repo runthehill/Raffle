@@ -1,0 +1,95 @@
+.spin-btn {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 6px;
+  padding: 20px 60px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #cc0000, #ff4444, #cc0000);
+  box-shadow:
+    0 0 20px rgba(255, 0, 0, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+.spin-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.spin-btn:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+/* Ready state: pulsing glow */
+.spin-btn--ready {
+  animation: spinBtnPulse 2s ease-in-out infinite;
+}
+
+@keyframes spinBtnPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(255, 0, 0, 0.3),
+      0 4px 15px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(255, 0, 0, 0.5),
+      0 0 60px rgba(255, 215, 0, 0.2),
+      0 4px 15px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.spin-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 0 40px rgba(255, 0, 0, 0.5),
+    0 0 60px rgba(255, 215, 0, 0.3),
+    0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.spin-btn:active:not(:disabled) {
+  transform: translateY(2px) scale(0.98);
+  box-shadow:
+    0 0 15px rgba(255, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.spin-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  animation: none;
+}
+
+/* Spinning state */
+.spin-btn--spinning {
+  background: linear-gradient(135deg, #666, #888, #666);
+  animation: none;
+  cursor: wait;
+}
+
+.spin-btn--spinning .spin-btn-text {
+  animation: pulse 0.8s ease-in-out infinite;
+}
+
+.spin-btn-text {
+  position: relative;
+  z-index: 1;
+}
