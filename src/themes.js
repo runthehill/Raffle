@@ -13,6 +13,8 @@
  *              background needs a different variant.
  */
 
+const base = import.meta.env.BASE_URL || '/';
+
 export const themes = [
   {
     id: 'dark',
@@ -59,8 +61,8 @@ export const themes = [
   {
     id: 'sligo',
     name: 'Sligo All Stars',
-    logo: '/sligo-allstars-logo-dark.png',
-    logoCert: '/sligo-allstars-logo-dark.png',
+    logo: `${base}sligo-allstars-logo-dark.png`,
+    logoCert: `${base}sligo-allstars-logo-dark.png`,
     cert: {
       bg: '#111111',
       inner: '#1A1A1A',
