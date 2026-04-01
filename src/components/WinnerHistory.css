@@ -1,0 +1,76 @@
+.history {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.history-title {
+  font-size: 1rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.history-empty {
+  color: var(--text-dimmed);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.3);
+  border-radius: 2px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 215, 0, 0.04);
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 8px;
+  animation: fadeIn 0.3s ease-out both;
+}
+
+.history-round {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--neon-gold);
+  min-width: 32px;
+  text-align: center;
+}
+
+.history-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-winner-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-prize {
+  font-size: 0.8rem;
+  color: var(--neon-pink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}

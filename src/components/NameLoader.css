@@ -1,0 +1,77 @@
+.name-loader {
+  border: 2px dashed rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--bg-card);
+}
+
+.name-loader:hover {
+  border-color: rgba(255, 215, 0, 0.6);
+  background: var(--bg-card-hover);
+}
+
+.name-loader--dragging {
+  border-color: var(--neon-gold);
+  background: rgba(255, 215, 0, 0.05);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+}
+
+.name-loader--loaded {
+  border-style: solid;
+  border-color: rgba(0, 255, 136, 0.4);
+}
+
+.name-loader-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-dimmed);
+}
+
+.name-loader-icon {
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.name-loader-or {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.name-loader-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.2);
+  margin-top: 4px;
+}
+
+.name-loader-loaded {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name-loader-check {
+  color: var(--neon-green);
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.name-loader-count {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--neon-green);
+}
+
+.name-loader-file {
+  font-size: 0.85rem;
+  color: var(--text-dimmed);
+}
+
+.name-loader-change {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 4px;
+}
