@@ -31,7 +31,7 @@ function deleteRaffleFromStorage(raffleName) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
 }
 
-export default function RaffleSetup({ onStart }) {
+export default function RaffleSetup({ onStart, themeLogo }) {
   const [raffleName, setRaffleName] = useState('');
   const [prizesText, setPrizesText] = useState('');
   const [names, setNames] = useState([]);
@@ -151,6 +151,11 @@ export default function RaffleSetup({ onStart }) {
 
   return (
     <div className="setup-container">
+      {themeLogo && (
+        <div className="setup-logo">
+          <img src={themeLogo} alt="" className="setup-logo-img" />
+        </div>
+      )}
       <h1 className="setup-title neon-text-gold">
         RAFFLE
       </h1>

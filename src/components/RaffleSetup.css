@@ -5,6 +5,18 @@
   animation: fadeIn 0.6s ease-out;
 }
 
+.setup-logo {
+  text-align: center;
+  margin-bottom: 16px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.setup-logo-img {
+  height: 120px;
+  width: auto;
+  object-fit: contain;
+}
+
 .setup-title {
   font-size: 4rem;
   text-align: center;

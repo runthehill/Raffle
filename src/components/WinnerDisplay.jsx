@@ -2,7 +2,7 @@ import React from 'react';
 import { downloadCertificate } from '../utils/certificate';
 import './WinnerDisplay.css';
 
-export default function WinnerDisplay({ winnerName, prizeName, raffleName, witnesses, onDismiss }) {
+export default function WinnerDisplay({ winnerName, prizeName, raffleName, witnesses, certColors, logo, onDismiss }) {
   const handleDownload = () => {
     downloadCertificate({
       raffleName,
@@ -10,6 +10,8 @@ export default function WinnerDisplay({ winnerName, prizeName, raffleName, witne
       prizeName,
       witnesses: witnesses || [],
       date: new Date().toISOString(),
+      certColors,
+      logo,
     });
   };
 

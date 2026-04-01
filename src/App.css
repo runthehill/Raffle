@@ -28,6 +28,33 @@
   --input-bg: var(--bg-card);
 }
 
+/* === Sligo All Stars Theme (Basketball — Black/White/Orange) === */
+[data-theme="sligo"] {
+  --bg-dark: #0E0E0E;
+  --bg-card: #1A1A1A;
+  --bg-card-hover: #242424;
+  --neon-gold: #FF6B00;
+  --neon-pink: #FF8C38;
+  --neon-blue: #FFFFFF;
+  --neon-red: #FF4444;
+  --neon-green: #FF6B00;
+  --neon-purple: #FF8C38;
+  --neon-orange: #FF6B00;
+  --text-primary: #FFFFFF;
+  --text-dimmed: #888888;
+  --glow-gold: 0 0 10px #FF6B00, 0 0 25px #FF6B0088, 0 0 50px #FF6B0044;
+  --glow-pink: 0 0 10px #FF8C38, 0 0 25px #FF8C3888;
+  --glow-blue: 0 0 10px #FFFFFF, 0 0 20px #FFFFFF44;
+  --glow-purple: 0 0 10px #FF6B00, 0 0 25px #FF6B0088;
+  --glow-green: 0 0 10px #FF6B00, 0 0 25px #FF6B0088;
+  --rainbow: linear-gradient(90deg, #FF6B00, #FF8C38, #FFFFFF, #FF8C38, #FF6B00);
+  --accent-border: rgba(255, 107, 0, 0.25);
+  --accent-border-hover: rgba(255, 107, 0, 0.5);
+  --accent-bg-subtle: rgba(255, 107, 0, 0.05);
+  --muted-text: rgba(255, 255, 255, 0.3);
+  --input-bg: #1A1A1A;
+}
+
 /* === Light Theme ("Sunny Fairground") === */
 [data-theme="light"] {
   --bg-dark: #FEF7EF;
@@ -204,13 +231,15 @@ h1, h2, h3 {
 
 /* === Draw Screen Layout === */
 .draw-screen {
+  flex: 1;
   display: flex;
   gap: 30px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
 }
 
 .draw-main {
@@ -218,12 +247,14 @@ h1, h2, h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 24px;
 }
 
 .draw-sidebar {
   width: 320px;
   flex-shrink: 0;
+  align-self: center;
 }
 
 /* === Animations === */
@@ -275,6 +306,254 @@ h1, h2, h3 {
     width: 100%;
     max-width: 500px;
   }
+}
+
+/* ========================================
+   SLIGO ALL STARS — Component Overrides
+   ======================================== */
+
+/* Basketball court background */
+[data-theme="sligo"] body::before {
+  background:
+    /* Centre circle */
+    radial-gradient(circle 180px at 50% 45%, transparent 170px, rgba(255, 107, 0, 0.06) 170px, rgba(255, 107, 0, 0.06) 180px, transparent 180px),
+    /* Half-court line */
+    linear-gradient(to right, transparent 49.7%, rgba(255, 107, 0, 0.06) 49.7%, rgba(255, 107, 0, 0.06) 50.3%, transparent 50.3%),
+    /* Subtle warm glow */
+    radial-gradient(ellipse 700px 500px at 50% 40%, rgba(255, 107, 0, 0.04), transparent);
+  animation: none;
+}
+
+[data-theme="sligo"] body::after {
+  /* No starfield — clean dark background */
+  background: none;
+  animation: none;
+}
+
+/* Slot machine — black/orange, no rainbow border */
+[data-theme="sligo"] .slot-frame {
+  background: linear-gradient(180deg, #1C1C1C, #141414);
+  border-color: #FF6B00;
+  box-shadow:
+    0 0 15px rgba(255, 107, 0, 0.3),
+    0 0 30px rgba(255, 107, 0, 0.1),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="sligo"] .slot-frame::before {
+  /* Solid orange border glow instead of rainbow */
+  background: linear-gradient(90deg, #FF6B00, #FF8C38, #FF6B00);
+  background-size: 200% 100%;
+}
+
+[data-theme="sligo"] .slot-viewport {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 107, 0, 0.2);
+}
+
+[data-theme="sligo"] .slot-center-highlight {
+  border-top: 2px solid #FF6B00;
+  border-bottom: 2px solid #FF6B00;
+  background: rgba(255, 107, 0, 0.08);
+  box-shadow:
+    inset 0 0 20px rgba(255, 107, 0, 0.08),
+    0 -3px 12px rgba(255, 107, 0, 0.08),
+    0 3px 12px rgba(255, 107, 0, 0.08);
+}
+
+[data-theme="sligo"] .slot-viewport::before {
+  background: linear-gradient(to bottom, rgba(14, 14, 14, 0.95), transparent);
+}
+
+[data-theme="sligo"] .slot-viewport::after {
+  background: linear-gradient(to top, rgba(14, 14, 14, 0.95), transparent);
+}
+
+[data-theme="sligo"] .slot-light {
+  background: #FF6B00;
+  box-shadow: 0 0 6px #FF6B00;
+}
+
+/* Marquee */
+[data-theme="sligo"] .marquee-container {
+  background: linear-gradient(90deg, rgba(14, 14, 14, 0.95), rgba(20, 20, 20, 0.95), rgba(14, 14, 14, 0.95));
+  border-bottom: 3px solid #FF6B00;
+  border-image: none;
+}
+
+[data-theme="sligo"] .marquee-container::before {
+  background: linear-gradient(90deg, rgba(255, 107, 0, 0.03), transparent, rgba(255, 107, 0, 0.03));
+}
+
+[data-theme="sligo"] .marquee-text {
+  background: linear-gradient(90deg, #FF6B00, #FFFFFF, #FF8C38, #FFFFFF, #FF6B00);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: none;
+}
+
+/* Spin button — orange instead of red */
+[data-theme="sligo"] .spin-btn {
+  background: linear-gradient(135deg, #CC5500, #FF6B00, #FF8C38);
+  box-shadow:
+    0 0 25px rgba(255, 107, 0, 0.4),
+    0 4px 15px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="sligo"] .spin-btn:hover:not(:disabled) {
+  box-shadow:
+    0 0 40px rgba(255, 107, 0, 0.5),
+    0 0 60px rgba(255, 140, 56, 0.2),
+    0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="sligo"] .spin-btn--spinning {
+  background: linear-gradient(135deg, #333, #444, #333);
+}
+
+/* Winner overlay */
+[data-theme="sligo"] .winner-overlay {
+  background: rgba(14, 14, 14, 0.85);
+}
+
+/* Setup */
+[data-theme="sligo"] .setup-title {
+  background: linear-gradient(135deg, #FF6B00, #FF8C38, #FFFFFF);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.4));
+}
+
+[data-theme="sligo"] .setup-subtitle {
+  color: #FF8C38;
+  text-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+}
+
+[data-theme="sligo"] .setup-label {
+  color: #FF6B00;
+  text-shadow: 0 0 6px rgba(255, 107, 0, 0.2);
+}
+
+[data-theme="sligo"] .setup-start-btn {
+  background: linear-gradient(135deg, #FF6B00, #FF8C38, #FF6B00);
+  background-size: 200% 200%;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 0 20px rgba(255, 107, 0, 0.4),
+    0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="sligo"] .setup-start-btn:hover:not(:disabled) {
+  box-shadow:
+    0 0 30px rgba(255, 107, 0, 0.5),
+    0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="sligo"] .setup-logo-img {
+  filter: drop-shadow(0 0 16px rgba(255, 107, 0, 0.35));
+  height: 140px;
+}
+
+/* Prize display */
+[data-theme="sligo"] .prize-label {
+  color: #FF8C38;
+  text-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
+}
+
+/* Cards */
+[data-theme="sligo"] .card {
+  border-color: rgba(255, 107, 0, 0.2);
+}
+
+/* History */
+[data-theme="sligo"] .history-item {
+  background: rgba(255, 107, 0, 0.04);
+  border-color: rgba(255, 107, 0, 0.12);
+}
+
+[data-theme="sligo"] .history-item:hover {
+  border-color: rgba(255, 107, 0, 0.3);
+  background: rgba(255, 107, 0, 0.08);
+}
+
+[data-theme="sligo"] .history-round {
+  color: #FF6B00;
+}
+
+[data-theme="sligo"] .history-prize {
+  color: #FF8C38;
+}
+
+/* Complete */
+[data-theme="sligo"] .complete-row {
+  background: rgba(255, 107, 0, 0.04);
+  border-color: rgba(255, 107, 0, 0.1);
+}
+
+[data-theme="sligo"] .complete-row:hover {
+  background: rgba(255, 107, 0, 0.08);
+  border-color: rgba(255, 107, 0, 0.25);
+}
+
+[data-theme="sligo"] .complete-row--selected {
+  background: rgba(255, 107, 0, 0.1);
+  border-color: rgba(255, 107, 0, 0.35);
+}
+
+[data-theme="sligo"] .complete-download-btn {
+  border-color: #FF6B00;
+  color: #FF6B00;
+}
+
+[data-theme="sligo"] .complete-download-btn:hover {
+  background: rgba(255, 107, 0, 0.1);
+  box-shadow: var(--glow-gold);
+}
+
+[data-theme="sligo"] .complete-new-btn {
+  border-color: #FFFFFF;
+  color: #FFFFFF;
+}
+
+[data-theme="sligo"] .complete-new-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Winner next button */
+[data-theme="sligo"] .winner-next-btn {
+  border-color: #FF6B00;
+  color: #FF6B00;
+}
+
+[data-theme="sligo"] .winner-next-btn:hover {
+  background: rgba(255, 107, 0, 0.1);
+  box-shadow: var(--glow-gold);
+}
+
+/* Name loader */
+[data-theme="sligo"] .name-loader-tab--active {
+  color: #FF6B00;
+  border-color: rgba(255, 107, 0, 0.4);
+  border-bottom-color: var(--bg-card);
+  text-shadow: none;
+}
+
+[data-theme="sligo"] .name-loader-tab {
+  border-color: rgba(255, 107, 0, 0.2);
+}
+
+[data-theme="sligo"] .name-loader {
+  border-color: rgba(255, 107, 0, 0.25);
+}
+
+[data-theme="sligo"] .name-loader--loaded {
+  border-color: rgba(255, 107, 0, 0.5);
 }
 
 /* ========================================

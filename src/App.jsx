@@ -8,8 +8,10 @@ import WinnerHistory from './components/WinnerHistory';
 import ConfettiCanvas from './components/ConfettiCanvas';
 import Marquee from './components/Marquee';
 import RaffleComplete from './components/RaffleComplete';
-import ThemeToggle from './components/ThemeToggle';
+import ThemeSelector from './components/ThemeSelector';
+import Footer from './components/Footer';
 import { pickRandom } from './utils/shuffle';
+import { getTheme, loadThemeLogo, loadThemeCertLogo } from './themes';
 
 function getInitialTheme() {
   try {
@@ -21,15 +23,19 @@ function getInitialTheme() {
 
 export default function App() {
   // Theme
-  const [theme, setTheme] = useState(getInitialTheme);
+  const [themeId, setThemeId] = useState(getInitialTheme);
+  const [certLogo, setCertLogo] = useState(null);
+  const theme = getTheme(themeId);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('raffle-theme', theme); } catch {}
-  }, [theme]);
+    document.documentElement.setAttribute('data-theme', themeId);
+    try { localStorage.setItem('raffle-theme', themeId); } catch {}
+    // Pre-load cert logo
+    loadThemeCertLogo(theme).then(setCertLogo);
+  }, [themeId, theme]);
 
-  const toggleTheme = useCallback(() => {
-    setTheme(t => t === 'dark' ? 'light' : 'dark');
+  const handleThemeChange = useCallback((id) => {
+    setThemeId(id);
   }, []);
 
   // App phases: 'setup' | 'drawing' | 'complete'
@@ -43,7 +49,7 @@ export default function App() {
 
   // Drawing state
   const [currentPrizeIndex, setCurrentPrizeIndex] = useState(0);
-  const [winners, setWinners] = useState([]); // [{ name, prize, timestamp }]
+  const [winners, setWinners] = useState([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [currentWinner, setCurrentWinner] = useState(null);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
@@ -68,8 +74,6 @@ export default function App() {
 
   const handleSpin = useCallback(() => {
     if (isSpinning || eligibleNames.length === 0) return;
-
-    // Pre-select winner
     const winner = pickRandom(eligibleNames);
     setCurrentWinner(winner);
     setIsSpinning(true);
@@ -84,20 +88,14 @@ export default function App() {
 
   const handleDismissWinner = useCallback(() => {
     if (!currentWinner) return;
-
     setShowWinnerModal(false);
     setShowConfetti(false);
-
-    // Add to winners list
     setWinners(prev => [...prev, {
       name: currentWinner,
       prize: currentPrize,
       timestamp: new Date().toISOString(),
     }]);
-
-    // Advance to next prize or complete
     if (currentPrizeIndex + 1 >= prizes.length) {
-      // Small delay so the history updates before transitioning
       setTimeout(() => setPhase('complete'), 300);
     } else {
       setCurrentPrizeIndex(i => i + 1);
@@ -118,13 +116,17 @@ export default function App() {
     setShowConfetti(false);
   }, []);
 
+  // Shared cert props
+  const certProps = { certColors: theme.cert, logo: certLogo };
+
   if (phase === 'setup') {
     return (
       <div className="app">
-        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        <ThemeSelector themeId={themeId} onChange={handleThemeChange} />
         <div className="app-content">
-          <RaffleSetup onStart={handleStartRaffle} />
+          <RaffleSetup onStart={handleStartRaffle} themeLogo={theme.logo} />
         </div>
+        <Footer />
       </div>
     );
   }
@@ -132,7 +134,7 @@ export default function App() {
   if (phase === 'complete') {
     return (
       <div className="app">
-        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        <ThemeSelector themeId={themeId} onChange={handleThemeChange} />
         <Marquee text={raffleName} />
         <div className="app-content">
           <RaffleComplete
@@ -140,16 +142,17 @@ export default function App() {
             winners={[...winners]}
             witnesses={witnesses}
             onNewRaffle={handleNewRaffle}
+            {...certProps}
           />
         </div>
+        <Footer />
       </div>
     );
   }
 
-  // Drawing phase
   return (
     <div className="app">
-      <ThemeToggle theme={theme} onToggle={toggleTheme} />
+      <ThemeSelector themeId={themeId} onChange={handleThemeChange} />
       <Marquee text={raffleName} />
       <div className="draw-screen">
         <div className="draw-main">
@@ -181,6 +184,8 @@ export default function App() {
         </div>
       </div>
 
+      <Footer />
+
       {showConfetti && <ConfettiCanvas />}
       {showWinnerModal && (
         <WinnerDisplay
@@ -189,6 +194,7 @@ export default function App() {
           raffleName={raffleName}
           witnesses={witnesses}
           onDismiss={handleDismissWinner}
+          {...certProps}
         />
       )}
     </div>

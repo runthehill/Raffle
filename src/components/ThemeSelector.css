@@ -1,0 +1,104 @@
+.theme-selector {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px 5px 12px;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 20px;
+  background: rgba(20, 14, 40, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.12);
+  transition: all 0.3s;
+}
+
+.theme-selector:hover {
+  border-color: var(--neon-gold);
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.2);
+}
+
+.theme-selector-label {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--neon-gold);
+  white-space: nowrap;
+}
+
+.theme-selector-select {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23FFD700'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  padding-right: 16px;
+}
+
+.theme-selector-select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+/* Light theme */
+[data-theme="light"] .theme-selector {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--accent-border-hover);
+  box-shadow: 0 2px 10px rgba(170, 0, 255, 0.08);
+}
+
+[data-theme="light"] .theme-selector:hover {
+  border-color: var(--neon-purple);
+  box-shadow: var(--glow-purple);
+}
+
+[data-theme="light"] .theme-selector-label {
+  color: var(--neon-purple);
+}
+
+[data-theme="light"] .theme-selector-select {
+  color: var(--text-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23AA00FF'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .theme-selector-select option {
+  background: #fff;
+  color: #1A1028;
+}
+
+/* Sligo theme */
+[data-theme="sligo"] .theme-selector {
+  background: rgba(17, 17, 17, 0.9);
+  border-color: rgba(255, 107, 0, 0.4);
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.12);
+}
+
+[data-theme="sligo"] .theme-selector:hover {
+  border-color: #FF6B00;
+  box-shadow: 0 0 16px rgba(255, 107, 0, 0.25);
+}
+
+[data-theme="sligo"] .theme-selector-label {
+  color: #FF6B00;
+}
+
+[data-theme="sligo"] .theme-selector-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23FF6B00'/%3E%3C/svg%3E");
+}
+
+[data-theme="sligo"] .theme-selector-select option {
+  background: #1a1a1a;
+  color: #fff;
+}

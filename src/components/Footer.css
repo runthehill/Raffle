@@ -1,0 +1,28 @@
+.app-footer {
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--text-dimmed);
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  letter-spacing: 0.5px;
+}
+
+.app-footer:hover {
+  opacity: 0.8;
+}
+
+.app-footer-sep {
+  margin: 0 6px;
+}
+
+.app-footer-link {
+  color: var(--neon-gold);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.app-footer-link:hover {
+  text-decoration: underline;
+  opacity: 1;
+}

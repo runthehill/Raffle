@@ -3,11 +3,11 @@ import WinnerCertificate from './WinnerCertificate';
 import { downloadAllCertificates } from '../utils/certificate';
 import './RaffleComplete.css';
 
-export default function RaffleComplete({ raffleName, winners, witnesses, onNewRaffle }) {
+export default function RaffleComplete({ raffleName, winners, witnesses, certColors, logo, onNewRaffle }) {
   const [selectedWinner, setSelectedWinner] = React.useState(null);
 
   const handleDownloadAll = () => {
-    downloadAllCertificates(raffleName, winners, witnesses);
+    downloadAllCertificates(raffleName, winners, witnesses, certColors, logo);
   };
 
   return (
@@ -41,6 +41,8 @@ export default function RaffleComplete({ raffleName, winners, witnesses, onNewRa
             prizeName={winners[selectedWinner].prize}
             witnesses={witnesses}
             date={winners[selectedWinner].timestamp}
+            certColors={certColors}
+            logo={logo}
           />
         </div>
       )}
