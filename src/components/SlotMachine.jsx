@@ -21,11 +21,27 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
       return { reelNames: [], targetIndex: 0 };
     }
 
-    // Ensure reel has enough items for smooth scrolling (minimum ~40 entries)
-    const minReelSize = Math.max(REEL_REPEATS, Math.ceil(40 / names.length));
+    // Build reel ensuring no name appears within VISIBLE_SLOTS positions of itself.
+    // This prevents duplicate names showing in the viewport during the spin.
+    const totalSlots = Math.max(40, names.length * REEL_REPEATS);
     let reel = [];
-    for (let i = 0; i < minReelSize; i++) {
-      reel = reel.concat(shuffle(names));
+    let pool = [];
+
+    for (let i = 0; i < totalSlots; i++) {
+      if (pool.length === 0) {
+        pool = shuffle(names);
+      }
+      // Find a candidate that isn't already in the recent visible window
+      const windowStart = Math.max(0, reel.length - VISIBLE_SLOTS + 1);
+      const recent = reel.slice(windowStart);
+      const idx = pool.findIndex(n => !recent.includes(n));
+      if (idx >= 0) {
+        reel.push(pool[idx]);
+        pool.splice(idx, 1);
+      } else {
+        // Fallback for very small name lists (fewer names than visible slots)
+        reel.push(pool.shift());
+      }
     }
 
     // Place winner at a position that gives the animation a controlled decel distance.
@@ -39,10 +55,19 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
     const cruiseDist = ANIM_MAX_SPEED * ANIM_SLOT_H * (ANIM_CRUISE_MS / 1000);
     const preDecelSlots = Math.ceil((spinUpDist + cruiseDist) / ANIM_SLOT_H);
     const idealLanding = preDecelSlots + DECEL_SLOTS;
-    // Wrap to a valid reel position
     const targetIdx = idealLanding % reel.length;
     if (winner && targetIdx < reel.length) {
       reel[targetIdx] = winner;
+      // Clear any duplicates of the winner within the visible window around landing
+      for (let i = targetIdx - VISIBLE_SLOTS; i <= targetIdx + VISIBLE_SLOTS; i++) {
+        if (i === targetIdx || i < 0 || i >= reel.length) continue;
+        if (reel[i] === winner) {
+          // Replace with a non-duplicate neighbour from the names list
+          const nearby = new Set(reel.slice(Math.max(0, i - VISIBLE_SLOTS + 1), i + VISIBLE_SLOTS));
+          const replacement = shuffle(names).find(n => n !== winner && !nearby.has(n));
+          if (replacement) reel[i] = replacement;
+        }
+      }
     }
 
     return { reelNames: reel, targetIndex: targetIdx };
