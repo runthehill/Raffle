@@ -60,6 +60,8 @@ export default function App() {
   }, []);
 
   const handleDismissWinner = useCallback(() => {
+    if (!currentWinner) return;
+
     setShowWinnerModal(false);
     setShowConfetti(false);
 

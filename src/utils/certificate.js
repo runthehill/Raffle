@@ -151,6 +151,7 @@ function drawDivider(ctx, x, y, width) {
 export function downloadCertificate({ raffleName, winnerName, prizeName, date }) {
   const canvas = renderCertificate({ raffleName, winnerName, prizeName, date });
   canvas.toBlob((blob) => {
+    if (!blob) return;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

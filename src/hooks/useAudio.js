@@ -54,6 +54,14 @@ export default function useAudio() {
    */
   const startSpin = useCallback(() => {
     try {
+      // Stop any existing spin sound first
+      if (spinOscRef.current) {
+        const { osc1, osc2 } = spinOscRef.current;
+        try { osc1.stop(); } catch (e) { /* already stopped */ }
+        try { osc2.stop(); } catch (e) { /* already stopped */ }
+        spinOscRef.current = null;
+      }
+
       const ctx = getCtx();
 
       // Create a noise-like whir using detuned oscillators

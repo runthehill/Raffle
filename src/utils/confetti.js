@@ -110,6 +110,7 @@ export function createConfettiSystem(canvas) {
       animId = null;
     }
     particles = [];
+    window.removeEventListener('resize', resize);
   };
 
   window.addEventListener('resize', resize);

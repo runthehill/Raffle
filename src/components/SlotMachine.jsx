@@ -11,6 +11,7 @@ const REEL_REPEATS = 4;
 export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpinComplete }) {
   const { playTick, startSpin, stopSpin, playFanfare, playDrumroll } = useAudio();
   const lastTickSlot = useRef(-1);
+  const drumrollFired = useRef(false);
   const shakeRef = useRef(null);
 
   // Build virtual reel: shuffle names and repeat, placing winner at target position
@@ -85,14 +86,17 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
     }
   }, [offset, phase, slotHeight, playTick]);
 
-  // Play drumroll near the end
+  // Play drumroll near the end (once)
   useEffect(() => {
     if (phase === 'spinning') {
       const totalDistance = (targetIndex - CENTER_INDEX) * slotHeight;
       const progress = totalDistance > 0 ? offset / totalDistance : 0;
-      if (progress > 0.7 && progress < 0.72) {
+      if (progress > 0.7 && !drumrollFired.current) {
+        drumrollFired.current = true;
         playDrumroll();
       }
+    } else if (phase === 'idle') {
+      drumrollFired.current = false;
     }
   }, [offset, phase, targetIndex, slotHeight, playDrumroll]);
 

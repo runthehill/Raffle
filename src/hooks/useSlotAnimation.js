@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { easeInCubic, easeOutCubic, slotDeceleration } from '../utils/easing';
+import { easeInCubic, slotDeceleration } from '../utils/easing';
 
 const SLOT_HEIGHT = 80; // px per name slot
 
