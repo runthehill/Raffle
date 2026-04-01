@@ -5,13 +5,40 @@
 
 .slot-frame {
   position: relative;
-  background: linear-gradient(180deg, #1a1a2e, #12122a);
-  border: 3px solid var(--neon-gold);
+  background: linear-gradient(180deg, #1a1035, #10082a);
+  border: 3px solid transparent;
+  border-image: var(--rainbow) 1;
   border-radius: 16px;
   padding: 20px;
   box-shadow:
-    var(--glow-gold),
+    0 0 15px rgba(191, 64, 255, 0.3),
+    0 0 30px rgba(0, 229, 255, 0.15),
     inset 0 0 30px rgba(0, 0, 0, 0.5);
+  /* border-image doesn't work with border-radius, so use outline trick */
+  border-image: none;
+  border-color: var(--neon-purple);
+  overflow: hidden;
+}
+
+.slot-frame::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 18px;
+  background: var(--rainbow);
+  background-size: 200% 100%;
+  animation: rainbowBorder 3s linear infinite;
+  z-index: -1;
+  padding: 3px;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+}
+
+@keyframes rainbowBorder {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
 }
 
 /* Light bulb border */
@@ -28,21 +55,25 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--neon-gold);
-  box-shadow: 0 0 6px var(--neon-gold);
+  background: hsl(var(--light-hue, 45), 100%, 60%);
+  box-shadow: 0 0 8px hsl(var(--light-hue, 45), 100%, 60%);
+  animation: lightChase 2s ease-in-out infinite;
+  animation-delay: calc(var(--light-index, 0) * 0.08s);
 }
 
-.slot-light--a {
-  animation: lightBlink 1s ease-in-out infinite;
+.slot-light--spinning {
+  animation: lightRave 0.3s ease-in-out infinite;
+  animation-delay: calc(var(--light-index, 0) * 0.03s);
 }
 
-.slot-light--b {
-  animation: lightBlink 1s ease-in-out infinite 0.5s;
+@keyframes lightChase {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
-@keyframes lightBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+@keyframes lightRave {
+  0%, 100% { opacity: 1; transform: scale(1.3); }
+  50% { opacity: 0.3; transform: scale(0.7); }
 }
 
 /* Viewport */
@@ -51,8 +82,8 @@
   height: 400px; /* 5 slots * 80px */
   overflow: hidden;
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(191, 64, 255, 0.2);
 }
 
 /* Center slot highlight */
@@ -62,12 +93,18 @@
   left: 0;
   right: 0;
   height: 80px;
-  border-top: 2px solid var(--neon-gold);
-  border-bottom: 2px solid var(--neon-gold);
-  background: rgba(255, 215, 0, 0.06);
+  border-top: 2px solid var(--neon-pink);
+  border-bottom: 2px solid var(--neon-blue);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 45, 120, 0.06),
+    rgba(191, 64, 255, 0.08),
+    rgba(0, 229, 255, 0.06)
+  );
   box-shadow:
-    inset 0 0 20px rgba(255, 215, 0, 0.08),
-    0 0 15px rgba(255, 215, 0, 0.1);
+    inset 0 0 25px rgba(191, 64, 255, 0.1),
+    0 -4px 15px rgba(255, 45, 120, 0.1),
+    0 4px 15px rgba(0, 229, 255, 0.1);
   z-index: 2;
   pointer-events: none;
 }
@@ -127,10 +164,10 @@
 
 .slot-viewport::before {
   top: 0;
-  background: linear-gradient(to bottom, rgba(10, 10, 26, 0.9), transparent);
+  background: linear-gradient(to bottom, rgba(8, 4, 21, 0.95), transparent);
 }
 
 .slot-viewport::after {
   bottom: 0;
-  background: linear-gradient(to top, rgba(10, 10, 26, 0.9), transparent);
+  background: linear-gradient(to top, rgba(8, 4, 21, 0.95), transparent);
 }

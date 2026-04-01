@@ -6,7 +6,6 @@ import { useRef, useCallback } from 'react';
  */
 export default function useAudio() {
   const ctxRef = useRef(null);
-  const spinOscRef = useRef(null);
 
   const getCtx = useCallback(() => {
     if (!ctxRef.current || ctxRef.current.state === 'closed') {
@@ -19,156 +18,131 @@ export default function useAudio() {
   }, []);
 
   /**
-   * Short mechanical tick sound.
+   * Short percussive click — like a physical reel peg snapping past.
+   * Uses a noise burst through a bandpass filter for a clean "clack."
    */
-  const playTick = useCallback((volume = 0.3) => {
+  const playTick = useCallback((volume = 0.3, pitch = 1.0) => {
     try {
       const ctx = getCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const duration = 0.025;
+
+      // Create a short noise burst
+      const bufferSize = Math.ceil(ctx.sampleRate * duration);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      // Bandpass filter gives it a "clack" character
       const filter = ctx.createBiquadFilter();
-
       filter.type = 'bandpass';
-      filter.frequency.value = 3000;
-      filter.Q.value = 5;
+      filter.frequency.value = 1800 * pitch;
+      filter.Q.value = 1.5;
 
-      osc.type = 'square';
-      osc.frequency.value = 1200;
-
+      // Sharp attack, instant decay
+      const gain = ctx.createGain();
       gain.gain.setValueAtTime(volume, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
 
-      osc.connect(filter);
+      noise.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
 
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.05);
-    } catch (e) {
-      // Audio not available, silently fail
-    }
-  }, [getCtx]);
-
-  /**
-   * Start a looping spin/whir sound that rises in pitch.
-   */
-  const startSpin = useCallback(() => {
-    try {
-      // Stop any existing spin sound first
-      if (spinOscRef.current) {
-        const { osc1, osc2 } = spinOscRef.current;
-        try { osc1.stop(); } catch (e) { /* already stopped */ }
-        try { osc2.stop(); } catch (e) { /* already stopped */ }
-        spinOscRef.current = null;
-      }
-
-      const ctx = getCtx();
-
-      // Create a noise-like whir using detuned oscillators
-      const osc1 = ctx.createOscillator();
-      const osc2 = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc1.type = 'sawtooth';
-      osc1.frequency.value = 80;
-      osc2.type = 'sawtooth';
-      osc2.frequency.value = 83;
-
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-
-      osc1.connect(gain);
-      osc2.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc1.start();
-      osc2.start();
-
-      spinOscRef.current = { osc1, osc2, gain, ctx };
+      noise.start(ctx.currentTime);
+      noise.stop(ctx.currentTime + duration);
     } catch (e) {
       // Audio not available
     }
   }, [getCtx]);
 
   /**
-   * Ramp down and stop the spin sound.
+   * No-op — we rely on tick sounds for the spinning audio.
+   * The rhythmic clicking of names scrolling past IS the spin sound.
    */
-  const stopSpin = useCallback(() => {
-    try {
-      const ref = spinOscRef.current;
-      if (ref) {
-        const { osc1, osc2, gain, ctx } = ref;
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-        osc1.stop(ctx.currentTime + 0.6);
-        osc2.stop(ctx.currentTime + 0.6);
-        spinOscRef.current = null;
-      }
-    } catch (e) {
-      // Already stopped
-    }
-  }, []);
+  const startSpin = useCallback(() => {}, []);
+  const stopSpin = useCallback(() => {}, []);
 
   /**
-   * Triumphant fanfare — ascending major chord arpeggio.
+   * Triumphant fanfare — bright ascending arpeggio with shimmer.
    */
   const playFanfare = useCallback(() => {
     try {
       const ctx = getCtx();
-      const notes = [261.6, 329.6, 392.0, 523.3]; // C4, E4, G4, C5
       const masterGain = ctx.createGain();
-      masterGain.gain.value = 0.2;
+      masterGain.gain.value = 0.18;
       masterGain.connect(ctx.destination);
 
+      // Ascending arpeggio: C4 E4 G4 C5
+      const notes = [261.6, 329.6, 392.0, 523.3];
+
       notes.forEach((freq, i) => {
+        const delay = i * 0.1;
+
+        // Main tone (triangle for warmth)
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        const delay = i * 0.12;
-
-        osc.type = 'sawtooth';
+        osc.type = 'triangle';
         osc.frequency.value = freq;
-
         gain.gain.setValueAtTime(0, ctx.currentTime + delay);
-        gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + delay + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 1.2);
-
+        gain.gain.linearRampToValueAtTime(0.5, ctx.currentTime + delay + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 1.0);
         osc.connect(gain);
         gain.connect(masterGain);
-
         osc.start(ctx.currentTime + delay);
-        osc.stop(ctx.currentTime + delay + 1.3);
+        osc.stop(ctx.currentTime + delay + 1.1);
+
+        // Shimmer overtone (sine, octave up)
+        const shimmer = ctx.createOscillator();
+        const shimmerGain = ctx.createGain();
+        shimmer.type = 'sine';
+        shimmer.frequency.value = freq * 2;
+        shimmerGain.gain.setValueAtTime(0, ctx.currentTime + delay);
+        shimmerGain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + delay + 0.04);
+        shimmerGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.6);
+        shimmer.connect(shimmerGain);
+        shimmerGain.connect(masterGain);
+        shimmer.start(ctx.currentTime + delay);
+        shimmer.stop(ctx.currentTime + delay + 0.7);
       });
 
-      // Final sustained chord
+      // Sustained major chord at the end
       setTimeout(() => {
-        const chord = [523.3, 659.3, 784.0]; // C5, E5, G5
-        const chordGain = ctx.createGain();
-        chordGain.gain.setValueAtTime(0.15, ctx.currentTime);
-        chordGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
-        chordGain.connect(ctx.destination);
+        try {
+          const chord = [523.3, 659.3, 784.0]; // C5, E5, G5
+          const chordGain = ctx.createGain();
+          chordGain.gain.setValueAtTime(0.12, ctx.currentTime);
+          chordGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.5);
+          chordGain.connect(ctx.destination);
 
-        chord.forEach(freq => {
-          const osc = ctx.createOscillator();
-          osc.type = 'triangle';
-          osc.frequency.value = freq;
-          osc.connect(chordGain);
-          osc.start(ctx.currentTime);
-          osc.stop(ctx.currentTime + 2.0);
-        });
-      }, 500);
+          chord.forEach(freq => {
+            const osc = ctx.createOscillator();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            osc.connect(chordGain);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 2.6);
+          });
+        } catch (e) { /* ctx may be closed */ }
+      }, 450);
     } catch (e) {
       // Audio not available
     }
   }, [getCtx]);
 
   /**
-   * Drumroll — rapid oscillating noise bursts.
+   * Drumroll — filtered noise that builds in intensity.
    */
   const playDrumroll = useCallback(() => {
     try {
       const ctx = getCtx();
       const duration = 1.5;
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.05, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + duration);
+      gain.gain.setValueAtTime(0.03, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + duration);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration + 0.3);
       gain.connect(ctx.destination);
 
@@ -184,8 +158,9 @@ export default function useAudio() {
       noise.buffer = buffer;
 
       const filter = ctx.createBiquadFilter();
-      filter.type = 'highpass';
-      filter.frequency.value = 500;
+      filter.type = 'bandpass';
+      filter.frequency.value = 600;
+      filter.Q.value = 0.8;
 
       noise.connect(filter);
       filter.connect(gain);

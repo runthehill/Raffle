@@ -11,6 +11,7 @@ const REEL_REPEATS = 4;
 export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpinComplete }) {
   const { playTick, startSpin, stopSpin, playFanfare, playDrumroll } = useAudio();
   const lastTickSlot = useRef(-1);
+  const tickCounter = useRef(0);
   const drumrollFired = useRef(false);
   const shakeRef = useRef(null);
 
@@ -27,8 +28,19 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
       reel = reel.concat(shuffle(names));
     }
 
-    // Place winner at a good target position (near the end of the reel)
-    const targetIdx = Math.floor(reel.length * 0.75) + CENTER_INDEX;
+    // Place winner at a position that gives the animation a controlled decel distance.
+    // These constants must match useSlotAnimation to ensure the reel lands exactly here.
+    const ANIM_MAX_SPEED = 35;
+    const ANIM_SLOT_H = 80;
+    const ANIM_SPINUP_MS = 400;
+    const ANIM_CRUISE_MS = 2100;
+    const DECEL_SLOTS = 25;
+    const spinUpDist = ANIM_MAX_SPEED * ANIM_SLOT_H * (ANIM_SPINUP_MS / 1000) * 0.5;
+    const cruiseDist = ANIM_MAX_SPEED * ANIM_SLOT_H * (ANIM_CRUISE_MS / 1000);
+    const preDecelSlots = Math.ceil((spinUpDist + cruiseDist) / ANIM_SLOT_H);
+    const idealLanding = preDecelSlots + DECEL_SLOTS;
+    // Wrap to a valid reel position
+    const targetIdx = idealLanding % reel.length;
     if (winner && targetIdx < reel.length) {
       reel[targetIdx] = winner;
     }
@@ -58,7 +70,7 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
 
   const { offset, phase, slotHeight, start, reset } = useSlotAnimation({
     totalItems: reelNames.length,
-    targetIndex: targetIndex - CENTER_INDEX, // adjust so winner lands in center
+    targetIndex: targetIndex,
     onComplete: handleComplete,
   });
 
@@ -66,6 +78,8 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
   useEffect(() => {
     if (isSpinning && reelNames.length > 0) {
       reset();
+      lastTickSlot.current = -1;
+      tickCounter.current = 0;
       // Small delay to ensure reset completes
       requestAnimationFrame(() => {
         start();
@@ -74,22 +88,37 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
     }
   }, [spinKey]);
 
-  // Play tick sounds as names scroll past center
+  // Play tick sounds as names scroll past center.
+  // At high speed, skip ticks to avoid buzzing. As speed drops, play every tick.
+  const prevTickOffset = useRef(0);
   useEffect(() => {
     if (phase !== 'spinning') return;
     const currentSlot = Math.floor(offset / slotHeight);
     if (currentSlot !== lastTickSlot.current && currentSlot > 0) {
       lastTickSlot.current = currentSlot;
-      // Volume increases as we slow down
-      const vol = phase === 'spinning' ? 0.15 + Math.random() * 0.1 : 0.3;
-      playTick(vol);
+      tickCounter.current++;
+
+      // Calculate approximate speed (slots per frame)
+      const speed = Math.abs(offset - prevTickOffset.current) / slotHeight;
+      prevTickOffset.current = offset;
+
+      // At high speed (>20 slots/frame-batch), play every 3rd tick
+      // At medium speed, play every 2nd. At slow speed, play every tick.
+      const skipRate = speed > 15 ? 3 : speed > 5 ? 2 : 1;
+      if (tickCounter.current % skipRate !== 0) return;
+
+      // Volume and pitch vary with speed — louder and lower pitch as it slows
+      const normalizedSpeed = Math.min(speed / 20, 1);
+      const vol = 0.1 + (1 - normalizedSpeed) * 0.25;
+      const pitch = 0.7 + normalizedSpeed * 0.6;
+      playTick(vol, pitch);
     }
   }, [offset, phase, slotHeight, playTick]);
 
   // Play drumroll near the end (once)
   useEffect(() => {
     if (phase === 'spinning') {
-      const totalDistance = (targetIndex - CENTER_INDEX) * slotHeight;
+      const totalDistance = targetIndex * slotHeight;
       const progress = totalDistance > 0 ? offset / totalDistance : 0;
       if (progress > 0.7 && !drumrollFired.current) {
         drumrollFired.current = true;
@@ -123,7 +152,7 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
   const visibleNames = getVisibleNames();
   const subPixelOffset = offset % slotHeight;
 
-  // Speed-based blur: calculate based on how far we've moved recently
+  // Speed-based blur
   const prevOffset = useRef(0);
   const speed = phase === 'spinning'
     ? Math.abs(offset - prevOffset.current)
@@ -136,10 +165,14 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
       <div className="slot-frame">
         {/* Light bulb border */}
         <div className="slot-lights">
-          {Array.from({ length: 20 }, (_, i) => (
+          {Array.from({ length: 24 }, (_, i) => (
             <span
               key={i}
-              className={`slot-light ${i % 2 === 0 ? 'slot-light--a' : 'slot-light--b'}`}
+              className={`slot-light ${phase === 'spinning' ? 'slot-light--spinning' : ''}`}
+              style={{
+                '--light-index': i,
+                '--light-hue': (i * 15) % 360,
+              }}
             />
           ))}
         </div>

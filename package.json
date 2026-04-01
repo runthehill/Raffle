@@ -1,7 +1,7 @@
 {
   "name": "raffle-winner-picker",
-  "version": "1.0.0",
-  "description": "Vegas-style raffle winner picker with slot machine animation",
+  "version": "1.0.1",
+  "description": "Fun raffle winner picker with slot machine animation.",
   "private": true,
   "scripts": {
     "dev": "vite",

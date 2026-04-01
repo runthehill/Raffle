@@ -3,13 +3,15 @@
  * Renders a decorative certificate and exports as PNG.
  */
 
+import { version } from '../../package.json';
+
 const CERT_WIDTH = 1200;
 const CERT_HEIGHT = 850;
 
 /**
  * Draw a single certificate to a canvas and return it.
  */
-export function renderCertificate({ raffleName, winnerName, prizeName, date }) {
+export function renderCertificate({ raffleName, winnerName, prizeName, witnesses, date }) {
   const canvas = document.createElement('canvas');
   canvas.width = CERT_WIDTH;
   canvas.height = CERT_HEIGHT;
@@ -37,12 +39,12 @@ export function renderCertificate({ raffleName, winnerName, prizeName, date }) {
   drawCornerStar(ctx, 55, CERT_HEIGHT - 55);
   drawCornerStar(ctx, CERT_WIDTH - 55, CERT_HEIGHT - 55);
 
-  // Decorative line under raffle name
   const cx = CERT_WIDTH / 2;
+  const hasWitnesses = witnesses && witnesses.length > 0;
 
   // Raffle name (header)
   ctx.fillStyle = '#FFD700';
-  ctx.font = 'bold 28px "Arial Black", Impact, sans-serif';
+  ctx.font = 'bold 28px "Bungee", "Arial Black", Impact, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(raffleName.toUpperCase(), cx, 100);
@@ -50,66 +52,92 @@ export function renderCertificate({ raffleName, winnerName, prizeName, date }) {
   // Decorative divider
   drawDivider(ctx, cx, 140, 300);
 
-  // "Certificate of Award" / "Winner"
+  // "Certificate of Winning"
   ctx.fillStyle = '#FFFFFF';
-  ctx.font = '20px "Arial Black", Impact, sans-serif';
-  ctx.letterSpacing = '4px';
+  ctx.font = '20px "Bungee", "Arial Black", Impact, sans-serif';
   ctx.fillText('CERTIFICATE OF WINNING', cx, 185);
 
   // "This certifies that"
-  ctx.fillStyle = '#888899';
-  ctx.font = '18px -apple-system, "Segoe UI", Roboto, sans-serif';
-  ctx.fillText('This certifies that', cx, 260);
+  ctx.fillStyle = '#9090a8';
+  ctx.font = '18px "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText('This certifies that', cx, 250);
 
   // Winner name (large, gold)
   ctx.fillStyle = '#FFD700';
-  ctx.font = 'bold 52px "Arial Black", Impact, sans-serif';
-  // Truncate if too long
+  ctx.font = 'bold 52px "Bungee", "Arial Black", Impact, sans-serif';
   let displayName = winnerName;
   while (ctx.measureText(displayName).width > CERT_WIDTH - 160 && displayName.length > 3) {
     displayName = displayName.slice(0, -4) + '...';
   }
-  ctx.fillText(displayName, cx, 330);
+  ctx.fillText(displayName, cx, 320);
 
   // Decorative divider
-  drawDivider(ctx, cx, 370, 200);
+  drawDivider(ctx, cx, 360, 200);
 
   // "has won"
-  ctx.fillStyle = '#888899';
-  ctx.font = '18px -apple-system, "Segoe UI", Roboto, sans-serif';
-  ctx.fillText('has won', cx, 420);
+  ctx.fillStyle = '#9090a8';
+  ctx.font = '18px "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText('has won', cx, 400);
 
   // Prize name (large, pink)
-  ctx.fillStyle = '#FF1493';
-  ctx.font = 'bold 40px "Arial Black", Impact, sans-serif';
+  ctx.fillStyle = '#FF2D78';
+  ctx.font = 'bold 40px "Bungee", "Arial Black", Impact, sans-serif';
   let displayPrize = prizeName;
   while (ctx.measureText(displayPrize).width > CERT_WIDTH - 160 && displayPrize.length > 3) {
     displayPrize = displayPrize.slice(0, -4) + '...';
   }
-  ctx.fillText(displayPrize, cx, 485);
+  ctx.fillText(displayPrize, cx, 465);
 
   // Decorative divider
-  drawDivider(ctx, cx, 530, 300);
+  drawDivider(ctx, cx, 510, 300);
 
   // Stars decoration
   ctx.fillStyle = '#FFD700';
   ctx.font = '24px sans-serif';
-  ctx.fillText('\u2605  \u2605  \u2605', cx, 580);
+  ctx.fillText('\u2605  \u2605  \u2605', cx, 555);
 
   // Date
-  ctx.fillStyle = '#888899';
-  ctx.font = '16px -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.fillStyle = '#9090a8';
+  ctx.font = '16px "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif';
   const dateStr = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
-  ctx.fillText(dateStr, cx, 640);
+  ctx.fillText(dateStr, cx, 600);
+
+  // Witnesses
+  if (hasWitnesses) {
+    const witnessY = 660;
+
+    ctx.fillStyle = '#9090a8';
+    ctx.font = '14px "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif';
+    ctx.fillText('Witnessed by:', cx, witnessY);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '18px "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif';
+
+    if (witnesses.length === 1) {
+      ctx.fillText(witnesses[0], cx, witnessY + 30);
+      // Signature line
+      drawSignatureLine(ctx, cx, witnessY + 50, 200);
+    } else {
+      // Two witnesses side by side
+      const leftX = CERT_WIDTH * 0.3;
+      const rightX = CERT_WIDTH * 0.7;
+
+      ctx.fillText(witnesses[0], leftX, witnessY + 30);
+      drawSignatureLine(ctx, leftX, witnessY + 50, 200);
+
+      ctx.fillText(witnesses[1], rightX, witnessY + 30);
+      drawSignatureLine(ctx, rightX, witnessY + 50, 200);
+    }
+  }
 
   // Footer text
   ctx.fillStyle = '#444466';
-  ctx.font = '12px -apple-system, "Segoe UI", Roboto, sans-serif';
-  ctx.fillText('Generated by Raffle Winner Picker', cx, CERT_HEIGHT - 60);
+  ctx.font = '12px "Nunito", -apple-system, "Segoe UI", Roboto, sans-serif';
+  ctx.fillText(`Generated by Jonathan's Raffle Winner Picker v${version}`, cx, CERT_HEIGHT - 60);
 
   return canvas;
 }
@@ -145,11 +173,22 @@ function drawDivider(ctx, x, y, width) {
   ctx.restore();
 }
 
+function drawSignatureLine(ctx, x, y, width) {
+  ctx.save();
+  ctx.strokeStyle = '#FFD70044';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x - width / 2, y);
+  ctx.lineTo(x + width / 2, y);
+  ctx.stroke();
+  ctx.restore();
+}
+
 /**
  * Download a certificate as PNG.
  */
-export function downloadCertificate({ raffleName, winnerName, prizeName, date }) {
-  const canvas = renderCertificate({ raffleName, winnerName, prizeName, date });
+export function downloadCertificate({ raffleName, winnerName, prizeName, witnesses, date }) {
+  const canvas = renderCertificate({ raffleName, winnerName, prizeName, witnesses, date });
   canvas.toBlob((blob) => {
     if (!blob) return;
     const url = URL.createObjectURL(blob);
@@ -166,7 +205,7 @@ export function downloadCertificate({ raffleName, winnerName, prizeName, date })
 /**
  * Download all certificates.
  */
-export function downloadAllCertificates(raffleName, winners) {
+export function downloadAllCertificates(raffleName, winners, witnesses) {
   winners.forEach((w, i) => {
     // Stagger downloads to avoid browser blocking
     setTimeout(() => {
@@ -174,6 +213,7 @@ export function downloadAllCertificates(raffleName, winners) {
         raffleName,
         winnerName: w.name,
         prizeName: w.prize,
+        witnesses: witnesses || [],
         date: w.timestamp,
       });
     }, i * 500);

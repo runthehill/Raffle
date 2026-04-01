@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import RaffleSetup from './components/RaffleSetup';
 import SlotMachine from './components/SlotMachine';
 import SpinButton from './components/SpinButton';
@@ -8,9 +8,30 @@ import WinnerHistory from './components/WinnerHistory';
 import ConfettiCanvas from './components/ConfettiCanvas';
 import Marquee from './components/Marquee';
 import RaffleComplete from './components/RaffleComplete';
+import ThemeToggle from './components/ThemeToggle';
 import { pickRandom } from './utils/shuffle';
 
+function getInitialTheme() {
+  try {
+    return localStorage.getItem('raffle-theme') || 'dark';
+  } catch {
+    return 'dark';
+  }
+}
+
 export default function App() {
+  // Theme
+  const [theme, setTheme] = useState(getInitialTheme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem('raffle-theme', theme); } catch {}
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(t => t === 'dark' ? 'light' : 'dark');
+  }, []);
+
   // App phases: 'setup' | 'drawing' | 'complete'
   const [phase, setPhase] = useState('setup');
 
@@ -18,6 +39,7 @@ export default function App() {
   const [raffleName, setRaffleName] = useState('');
   const [prizes, setPrizes] = useState([]);
   const [names, setNames] = useState([]);
+  const [witnesses, setWitnesses] = useState([]);
 
   // Drawing state
   const [currentPrizeIndex, setCurrentPrizeIndex] = useState(0);
@@ -38,6 +60,7 @@ export default function App() {
     setRaffleName(config.raffleName);
     setPrizes(config.prizes);
     setNames(config.names);
+    setWitnesses(config.witnesses || []);
     setCurrentPrizeIndex(0);
     setWinners([]);
     setPhase('drawing');
@@ -87,6 +110,7 @@ export default function App() {
     setRaffleName('');
     setPrizes([]);
     setNames([]);
+    setWitnesses([]);
     setCurrentPrizeIndex(0);
     setWinners([]);
     setCurrentWinner(null);
@@ -97,6 +121,7 @@ export default function App() {
   if (phase === 'setup') {
     return (
       <div className="app">
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
         <div className="app-content">
           <RaffleSetup onStart={handleStartRaffle} />
         </div>
@@ -107,11 +132,13 @@ export default function App() {
   if (phase === 'complete') {
     return (
       <div className="app">
+        <ThemeToggle theme={theme} onToggle={toggleTheme} />
         <Marquee text={raffleName} />
         <div className="app-content">
           <RaffleComplete
             raffleName={raffleName}
             winners={[...winners]}
+            witnesses={witnesses}
             onNewRaffle={handleNewRaffle}
           />
         </div>
@@ -122,6 +149,7 @@ export default function App() {
   // Drawing phase
   return (
     <div className="app">
+      <ThemeToggle theme={theme} onToggle={toggleTheme} />
       <Marquee text={raffleName} />
       <div className="draw-screen">
         <div className="draw-main">
@@ -159,6 +187,7 @@ export default function App() {
           winnerName={currentWinner}
           prizeName={currentPrize}
           raffleName={raffleName}
+          witnesses={witnesses}
           onDismiss={handleDismissWinner}
         />
       )}

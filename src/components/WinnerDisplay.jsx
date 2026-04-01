@@ -2,12 +2,13 @@ import React from 'react';
 import { downloadCertificate } from '../utils/certificate';
 import './WinnerDisplay.css';
 
-export default function WinnerDisplay({ winnerName, prizeName, raffleName, onDismiss }) {
+export default function WinnerDisplay({ winnerName, prizeName, raffleName, witnesses, onDismiss }) {
   const handleDownload = () => {
     downloadCertificate({
       raffleName,
       winnerName,
       prizeName,
+      witnesses: witnesses || [],
       date: new Date().toISOString(),
     });
   };
@@ -19,7 +20,7 @@ export default function WinnerDisplay({ winnerName, prizeName, raffleName, onDis
         <div className="winner-label">WINNER!</div>
         <div className="winner-name neon-text-gold">{winnerName}</div>
         <div className="winner-prize-label">wins</div>
-        <div className="winner-prize-name neon-text-pink">{prizeName}</div>
+        <div className="winner-prize-name">{prizeName}</div>
         <div className="winner-actions">
           <button className="winner-cert-btn" onClick={handleDownload}>
             Download Certificate

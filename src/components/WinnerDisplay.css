@@ -1,8 +1,8 @@
 .winner-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
+  background: rgba(8, 4, 21, 0.8);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,42 +20,41 @@
 @keyframes winnerEntrance {
   from {
     opacity: 0;
-    transform: scale(0.3);
+    transform: scale(0.3) rotate(-5deg);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(0);
   }
 }
 
 .winner-stars {
   font-size: 2rem;
-  color: var(--neon-gold);
   letter-spacing: 12px;
   margin-bottom: 10px;
-  animation: pulse 1s ease-in-out infinite;
+  animation: starSpin 2s ease-in-out infinite;
+  background: var(--rainbow);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rainbowShimmer 2s linear infinite;
 }
 
 .winner-label {
   font-family: var(--font-display);
   font-size: 3.5rem;
-  color: var(--neon-gold);
-  text-shadow:
-    0 0 20px #FFD700,
-    0 0 40px #FFD700,
-    0 0 80px #FFA500;
+  background: linear-gradient(135deg, var(--neon-gold), var(--neon-orange), var(--neon-pink));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rainbowShimmer 2s ease-in-out infinite alternate;
+  filter:
+    drop-shadow(0 0 20px rgba(255, 215, 0, 0.5))
+    drop-shadow(0 0 40px rgba(255, 107, 43, 0.3));
   letter-spacing: 12px;
   margin-bottom: 20px;
-  animation: winnerGlow 1.5s ease-in-out infinite;
-}
-
-@keyframes winnerGlow {
-  0%, 100% {
-    text-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700;
-  }
-  50% {
-    text-shadow: 0 0 30px #FFD700, 0 0 60px #FFD700, 0 0 100px #FFA500;
-  }
 }
 
 .winner-name {
@@ -78,6 +77,8 @@
   font-size: 1.8rem;
   margin-bottom: 30px;
   word-break: break-word;
+  color: var(--neon-blue);
+  text-shadow: var(--glow-blue);
 }
 
 .winner-actions {
@@ -90,7 +91,7 @@
 .winner-cert-btn {
   font-family: var(--font-body);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 12px 24px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
@@ -107,21 +108,22 @@
 
 .winner-next-btn {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 0.9rem;
   letter-spacing: 3px;
   padding: 14px 36px;
-  border: 2px solid var(--neon-gold);
+  border: 2px solid var(--neon-green);
   border-radius: 8px;
   background: transparent;
-  color: var(--neon-gold);
+  color: var(--neon-green);
   cursor: pointer;
   text-transform: uppercase;
   transition: all 0.2s;
+  text-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
 }
 
 .winner-next-btn:hover {
-  background: rgba(255, 215, 0, 0.1);
-  box-shadow: var(--glow-gold);
+  background: rgba(57, 255, 20, 0.1);
+  box-shadow: var(--glow-green);
 }
 
 @media (max-width: 600px) {

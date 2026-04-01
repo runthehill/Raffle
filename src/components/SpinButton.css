@@ -7,9 +7,10 @@
   border-radius: 50px;
   cursor: pointer;
   color: #fff;
-  background: linear-gradient(135deg, #cc0000, #ff4444, #cc0000);
+  background: linear-gradient(135deg, #cc0000, #ff2266, #ff4444);
   box-shadow:
-    0 0 20px rgba(255, 0, 0, 0.3),
+    0 0 25px rgba(255, 0, 0, 0.4),
+    0 0 50px rgba(255, 45, 120, 0.15),
     0 4px 15px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.2s;
@@ -28,7 +29,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.25),
     transparent
   );
   transition: left 0.5s;
@@ -38,7 +39,7 @@
   left: 100%;
 }
 
-/* Ready state: pulsing glow */
+/* Ready state: pulsing rainbow glow */
 .spin-btn--ready {
   animation: spinBtnPulse 2s ease-in-out infinite;
 }
@@ -46,22 +47,29 @@
 @keyframes spinBtnPulse {
   0%, 100% {
     box-shadow:
-      0 0 20px rgba(255, 0, 0, 0.3),
+      0 0 20px rgba(255, 0, 0, 0.4),
       0 4px 15px rgba(0, 0, 0, 0.4);
   }
-  50% {
+  33% {
     box-shadow:
-      0 0 40px rgba(255, 0, 0, 0.5),
-      0 0 60px rgba(255, 215, 0, 0.2),
+      0 0 40px rgba(255, 45, 120, 0.5),
+      0 0 60px rgba(191, 64, 255, 0.2),
+      0 4px 15px rgba(0, 0, 0, 0.4);
+  }
+  66% {
+    box-shadow:
+      0 0 40px rgba(255, 107, 43, 0.5),
+      0 0 60px rgba(255, 215, 0, 0.3),
       0 4px 15px rgba(0, 0, 0, 0.4);
   }
 }
 
 .spin-btn:hover:not(:disabled) {
-  transform: translateY(-3px) scale(1.02);
+  transform: translateY(-3px) scale(1.05);
   box-shadow:
     0 0 40px rgba(255, 0, 0, 0.5),
     0 0 60px rgba(255, 215, 0, 0.3),
+    0 0 80px rgba(191, 64, 255, 0.15),
     0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
@@ -80,7 +88,7 @@
 
 /* Spinning state */
 .spin-btn--spinning {
-  background: linear-gradient(135deg, #666, #888, #666);
+  background: linear-gradient(135deg, #444, #666, #444);
   animation: none;
   cursor: wait;
 }

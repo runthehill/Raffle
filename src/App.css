@@ -1,21 +1,58 @@
-/* === CSS Custom Properties (Vegas Theme) === */
+/* === CSS Custom Properties (Carnival Theme — Dark Default) === */
 :root {
-  --bg-dark: #0a0a1a;
-  --bg-card: #1a1a2e;
-  --bg-card-hover: #252542;
+  --bg-dark: #080415;
+  --bg-card: #140e28;
+  --bg-card-hover: #1e1540;
   --neon-gold: #FFD700;
-  --neon-pink: #FF1493;
-  --neon-blue: #00BFFF;
+  --neon-pink: #FF2D78;
+  --neon-blue: #00E5FF;
   --neon-red: #FF4444;
-  --neon-green: #00FF88;
+  --neon-green: #39FF14;
+  --neon-purple: #BF40FF;
+  --neon-orange: #FF6B2B;
   --text-primary: #FFFFFF;
-  --text-dimmed: #888899;
-  --font-display: 'Arial Black', 'Impact', 'Haettenschweiler', sans-serif;
-  --font-body: -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --glow-gold: 0 0 10px #FFD700, 0 0 20px #FFD70088, 0 0 40px #FFD70044;
-  --glow-pink: 0 0 10px #FF1493, 0 0 20px #FF149388;
-  --glow-blue: 0 0 10px #00BFFF, 0 0 20px #00BFFF88;
+  --text-dimmed: #9090a8;
+  --font-display: 'Bungee', 'Arial Black', 'Impact', sans-serif;
+  --font-body: 'Nunito', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --glow-gold: 0 0 10px #FFD700, 0 0 25px #FFD70088, 0 0 50px #FFD70044;
+  --glow-pink: 0 0 10px #FF2D78, 0 0 25px #FF2D7888;
+  --glow-blue: 0 0 10px #00E5FF, 0 0 25px #00E5FF88;
+  --glow-purple: 0 0 10px #BF40FF, 0 0 25px #BF40FF88;
+  --glow-green: 0 0 10px #39FF14, 0 0 25px #39FF1488;
+  --rainbow: linear-gradient(90deg, #FF2D78, #FF6B2B, #FFD700, #39FF14, #00E5FF, #BF40FF);
   --border-radius: 12px;
+  --accent-border: rgba(191, 64, 255, 0.2);
+  --accent-border-hover: rgba(191, 64, 255, 0.4);
+  --accent-bg-subtle: rgba(191, 64, 255, 0.04);
+  --muted-text: rgba(255, 255, 255, 0.25);
+  --input-bg: var(--bg-card);
+}
+
+/* === Light Theme ("Sunny Fairground") === */
+[data-theme="light"] {
+  --bg-dark: #FEF7EF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FFF3E8;
+  --neon-gold: #E6A800;
+  --neon-pink: #E91E72;
+  --neon-blue: #0091EA;
+  --neon-red: #E53935;
+  --neon-green: #00C853;
+  --neon-purple: #AA00FF;
+  --neon-orange: #F4511E;
+  --text-primary: #1A1028;
+  --text-dimmed: #6D5F82;
+  --glow-gold: 0 3px 16px rgba(230, 168, 0, 0.35), 0 0 4px rgba(230, 168, 0, 0.15);
+  --glow-pink: 0 3px 16px rgba(233, 30, 114, 0.3), 0 0 4px rgba(233, 30, 114, 0.12);
+  --glow-blue: 0 3px 16px rgba(0, 145, 234, 0.3), 0 0 4px rgba(0, 145, 234, 0.12);
+  --glow-purple: 0 3px 16px rgba(170, 0, 255, 0.25), 0 0 4px rgba(170, 0, 255, 0.1);
+  --glow-green: 0 3px 16px rgba(0, 200, 83, 0.3), 0 0 4px rgba(0, 200, 83, 0.12);
+  --rainbow: linear-gradient(90deg, #E91E72, #F4511E, #E6A800, #00C853, #0091EA, #AA00FF);
+  --accent-border: rgba(170, 0, 255, 0.18);
+  --accent-border-hover: rgba(170, 0, 255, 0.35);
+  --accent-bg-subtle: rgba(170, 0, 255, 0.05);
+  --muted-text: rgba(26, 16, 40, 0.35);
+  --input-bg: #FFFAF5;
 }
 
 /* === Reset & Base === */
@@ -29,28 +66,83 @@ body {
   background: var(--bg-dark);
   color: var(--text-primary);
   font-family: var(--font-body);
+  font-weight: 600;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
-/* === Starfield background === */
+/* === Dark theme backgrounds === */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 30% 60%, rgba(255,215,0,0.3), transparent),
-    radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 70% 80%, rgba(0,191,255,0.3), transparent),
-    radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 15% 85%, rgba(255,20,147,0.3), transparent),
-    radial-gradient(1px 1px at 45% 45%, rgba(255,255,255,0.2), transparent),
-    radial-gradient(1px 1px at 80% 15%, rgba(255,215,0,0.3), transparent),
-    radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.3), transparent),
-    radial-gradient(1px 1px at 65% 55%, rgba(0,191,255,0.2), transparent);
+    radial-gradient(ellipse 600px 400px at 20% 20%, rgba(191, 64, 255, 0.08), transparent),
+    radial-gradient(ellipse 500px 500px at 80% 80%, rgba(0, 229, 255, 0.06), transparent),
+    radial-gradient(ellipse 400px 300px at 60% 30%, rgba(255, 45, 120, 0.05), transparent);
   pointer-events: none;
   z-index: 0;
+  animation: bgShift 12s ease-in-out infinite alternate;
+  transition: opacity 0.4s;
+}
+
+@keyframes bgShift {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,215,0,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 70% 80%, rgba(0,229,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 90% 40%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 15% 85%, rgba(255,45,120,0.4), transparent),
+    radial-gradient(1px 1px at 45% 45%, rgba(191,64,255,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 80% 15%, rgba(255,215,0,0.4), transparent),
+    radial-gradient(1px 1px at 25% 35%, rgba(57,255,20,0.3), transparent),
+    radial-gradient(1px 1px at 65% 55%, rgba(0,229,255,0.3), transparent),
+    radial-gradient(1px 1px at 5% 50%, rgba(255,107,43,0.3), transparent),
+    radial-gradient(1.5px 1.5px at 95% 65%, rgba(255,255,255,0.4), transparent);
+  pointer-events: none;
+  z-index: 0;
+  animation: twinkle 4s ease-in-out infinite alternate;
+  transition: opacity 0.4s;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* === Light theme backgrounds === */
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse 600px 400px at 10% 10%, rgba(233, 30, 114, 0.08), transparent),
+    radial-gradient(ellipse 500px 500px at 90% 80%, rgba(0, 145, 234, 0.07), transparent),
+    radial-gradient(ellipse 400px 300px at 50% 30%, rgba(230, 168, 0, 0.06), transparent),
+    radial-gradient(ellipse 350px 350px at 70% 20%, rgba(170, 0, 255, 0.05), transparent);
+}
+
+[data-theme="light"] body::after {
+  background:
+    radial-gradient(4px 4px at 8% 15%, rgba(233, 30, 114, 0.2), transparent),
+    radial-gradient(3px 3px at 28% 55%, rgba(230, 168, 0, 0.18), transparent),
+    radial-gradient(4px 4px at 48% 8%, rgba(0, 145, 234, 0.18), transparent),
+    radial-gradient(3px 3px at 68% 75%, rgba(170, 0, 255, 0.16), transparent),
+    radial-gradient(4px 4px at 88% 30%, rgba(0, 200, 83, 0.16), transparent),
+    radial-gradient(3px 3px at 15% 80%, rgba(244, 81, 30, 0.14), transparent),
+    radial-gradient(3.5px 3.5px at 38% 38%, rgba(233, 30, 114, 0.14), transparent),
+    radial-gradient(4px 4px at 75% 18%, rgba(230, 168, 0, 0.16), transparent),
+    radial-gradient(3px 3px at 55% 65%, rgba(0, 145, 234, 0.12), transparent),
+    radial-gradient(3.5px 3.5px at 92% 55%, rgba(170, 0, 255, 0.12), transparent);
+  opacity: 0.85;
 }
 
 #root {
@@ -81,12 +173,18 @@ h1, h2, h3 {
   text-shadow: var(--glow-blue);
 }
 
+.neon-text-purple {
+  color: var(--neon-purple);
+  text-shadow: var(--glow-purple);
+}
+
 /* === Card === */
 .card {
   background: var(--bg-card);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  border: 1px solid var(--accent-border);
   border-radius: var(--border-radius);
   padding: 24px;
+  backdrop-filter: blur(4px);
 }
 
 /* === App Layout === */
@@ -144,6 +242,11 @@ h1, h2, h3 {
   100% { background-position: 200% center; }
 }
 
+@keyframes rainbowShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
 @keyframes shake {
   0%, 100% { transform: translate(0); }
   10% { transform: translate(-8px, 4px); }
@@ -172,4 +275,296 @@ h1, h2, h3 {
     width: 100%;
     max-width: 500px;
   }
+}
+
+/* ========================================
+   LIGHT THEME — Component Overrides
+   ======================================== */
+
+/* --- Slot Machine --- */
+[data-theme="light"] .slot-frame {
+  background: linear-gradient(180deg, #FFFFFF, #FFF7F0);
+  border-color: var(--neon-purple);
+  box-shadow:
+    0 6px 30px rgba(170, 0, 255, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 0 20px rgba(170, 0, 255, 0.04);
+}
+
+[data-theme="light"] .slot-frame::before {
+  background: var(--rainbow);
+  background-size: 200% 100%;
+  opacity: 0.9;
+}
+
+[data-theme="light"] .slot-viewport {
+  background: #FFFAF5;
+  border-color: rgba(170, 0, 255, 0.15);
+}
+
+[data-theme="light"] .slot-center-highlight {
+  border-top: 2px solid var(--neon-pink);
+  border-bottom: 2px solid var(--neon-blue);
+  background: linear-gradient(
+    90deg,
+    rgba(233, 30, 114, 0.08),
+    rgba(170, 0, 255, 0.1),
+    rgba(0, 145, 234, 0.08)
+  );
+  box-shadow:
+    inset 0 0 25px rgba(170, 0, 255, 0.06),
+    0 -3px 10px rgba(233, 30, 114, 0.08),
+    0 3px 10px rgba(0, 145, 234, 0.08);
+}
+
+[data-theme="light"] .slot-viewport::before {
+  background: linear-gradient(to bottom, rgba(254, 247, 239, 0.96), transparent);
+}
+
+[data-theme="light"] .slot-viewport::after {
+  background: linear-gradient(to top, rgba(254, 247, 239, 0.96), transparent);
+}
+
+[data-theme="light"] .slot-light {
+  box-shadow: 0 0 6px hsl(var(--light-hue, 45), 100%, 50%);
+  background: hsl(var(--light-hue, 45), 100%, 50%);
+}
+
+/* --- Marquee --- */
+[data-theme="light"] .marquee-container {
+  background: linear-gradient(90deg, rgba(255, 250, 245, 0.97), rgba(255, 248, 240, 0.97), rgba(255, 250, 245, 0.97));
+  border-bottom: 3px solid;
+  border-image: var(--rainbow) 1;
+}
+
+[data-theme="light"] .marquee-container::before {
+  background: linear-gradient(
+    90deg,
+    rgba(233, 30, 114, 0.05),
+    rgba(170, 0, 255, 0.05),
+    rgba(0, 145, 234, 0.05),
+    rgba(230, 168, 0, 0.05)
+  );
+}
+
+[data-theme="light"] .marquee-text {
+  filter: none;
+}
+
+/* --- Winner Display Overlay --- */
+[data-theme="light"] .winner-overlay {
+  background: rgba(255, 250, 245, 0.88);
+  backdrop-filter: blur(16px);
+}
+
+[data-theme="light"] .winner-prize-name {
+  color: var(--neon-blue);
+}
+
+/* --- Setup Form --- */
+[data-theme="light"] .setup-title {
+  filter: drop-shadow(0 2px 8px rgba(233, 30, 114, 0.2));
+}
+
+[data-theme="light"] .setup-input,
+[data-theme="light"] .setup-textarea {
+  background: var(--input-bg);
+  border-color: var(--accent-border);
+}
+
+[data-theme="light"] .setup-input:focus,
+[data-theme="light"] .setup-textarea:focus {
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 0 3px rgba(170, 0, 255, 0.12);
+}
+
+[data-theme="light"] .setup-input::placeholder,
+[data-theme="light"] .setup-textarea::placeholder {
+  color: var(--muted-text);
+}
+
+[data-theme="light"] .setup-start-btn {
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 4px 20px rgba(233, 30, 114, 0.3),
+    0 2px 8px rgba(230, 168, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .setup-start-btn:hover:not(:disabled) {
+  box-shadow:
+    0 6px 28px rgba(233, 30, 114, 0.4),
+    0 4px 12px rgba(230, 168, 0, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .setup-tool-btn {
+  border-color: var(--accent-border);
+  color: var(--neon-purple);
+  font-weight: 700;
+}
+
+[data-theme="light"] .setup-tool-btn:hover {
+  background: rgba(170, 0, 255, 0.07);
+  border-color: var(--accent-border-hover);
+  box-shadow: 0 2px 8px rgba(170, 0, 255, 0.1);
+}
+
+[data-theme="light"] .setup-saved-item:hover {
+  background: rgba(170, 0, 255, 0.05);
+}
+
+[data-theme="light"] .setup-saved-item + .setup-saved-item {
+  border-top-color: rgba(170, 0, 255, 0.08);
+}
+
+[data-theme="light"] .setup-error {
+  background: rgba(229, 57, 53, 0.08);
+  border-color: rgba(229, 57, 53, 0.25);
+}
+
+/* --- Spin Button --- */
+[data-theme="light"] .spin-btn {
+  box-shadow:
+    0 6px 24px rgba(229, 57, 53, 0.35),
+    0 2px 8px rgba(233, 30, 114, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .spin-btn:hover:not(:disabled) {
+  box-shadow:
+    0 8px 32px rgba(229, 57, 53, 0.45),
+    0 4px 12px rgba(233, 30, 114, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .spin-btn--spinning {
+  background: linear-gradient(135deg, #bbb, #ccc, #bbb);
+}
+
+/* --- Name Loader --- */
+[data-theme="light"] .name-loader {
+  background: var(--bg-card);
+  border-color: var(--accent-border);
+}
+
+[data-theme="light"] .name-loader:hover {
+  border-color: var(--accent-border-hover);
+  background: var(--bg-card-hover);
+  box-shadow: 0 2px 10px rgba(170, 0, 255, 0.08);
+}
+
+[data-theme="light"] .name-loader--dragging {
+  border-color: var(--neon-purple);
+  background: rgba(170, 0, 255, 0.04);
+  box-shadow: 0 0 20px rgba(170, 0, 255, 0.12);
+}
+
+[data-theme="light"] .name-loader--loaded {
+  border-color: rgba(0, 200, 83, 0.4);
+}
+
+[data-theme="light"] .name-loader-empty,
+[data-theme="light"] .name-loader-or,
+[data-theme="light"] .name-loader-hint,
+[data-theme="light"] .name-loader-change,
+[data-theme="light"] .name-loader-manual-hint {
+  color: var(--text-dimmed);
+}
+
+[data-theme="light"] .name-loader-manual {
+  background: var(--bg-card);
+  border-color: var(--accent-border);
+}
+
+[data-theme="light"] .name-loader-manual-input {
+  background: var(--input-bg);
+  border-color: var(--accent-border);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .name-loader-manual-input::placeholder {
+  color: var(--muted-text);
+}
+
+[data-theme="light"] .name-loader-list {
+  background: var(--bg-card);
+  border-color: var(--accent-border);
+}
+
+[data-theme="light"] .name-loader-name-tag {
+  background: rgba(170, 0, 255, 0.06);
+  border-color: rgba(170, 0, 255, 0.14);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .name-loader-name-remove {
+  color: var(--text-dimmed);
+}
+
+[data-theme="light"] .name-loader-tab {
+  border-color: var(--accent-border);
+  color: var(--text-dimmed);
+}
+
+[data-theme="light"] .name-loader-tab--active {
+  background: var(--bg-card);
+  border-color: var(--accent-border-hover);
+  border-bottom-color: var(--bg-card);
+  color: var(--neon-purple);
+  text-shadow: none;
+}
+
+/* --- Winner History --- */
+[data-theme="light"] .history-item {
+  background: var(--accent-bg-subtle);
+  border-color: var(--accent-border);
+}
+
+[data-theme="light"] .history-item:hover {
+  border-color: var(--accent-border-hover);
+  background: rgba(170, 0, 255, 0.07);
+}
+
+[data-theme="light"] .history-list::-webkit-scrollbar-thumb {
+  background: rgba(170, 0, 255, 0.3);
+}
+
+/* --- Raffle Complete --- */
+[data-theme="light"] .complete-title {
+  filter: drop-shadow(0 2px 8px rgba(233, 30, 114, 0.15));
+}
+
+[data-theme="light"] .complete-row {
+  background: var(--accent-bg-subtle);
+  border-color: var(--accent-border);
+}
+
+[data-theme="light"] .complete-row:hover {
+  background: rgba(170, 0, 255, 0.07);
+  border-color: var(--accent-border-hover);
+}
+
+[data-theme="light"] .complete-row--selected {
+  background: rgba(170, 0, 255, 0.1);
+  border-color: rgba(170, 0, 255, 0.35);
+}
+
+/* --- Theme Toggle (light overrides) --- */
+[data-theme="light"] .theme-toggle {
+  border-color: var(--accent-border-hover);
+  box-shadow: 0 2px 10px rgba(170, 0, 255, 0.1);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  border-color: var(--neon-purple);
+  box-shadow: var(--glow-purple);
+}
+
+/* --- Card (light) --- */
+[data-theme="light"] .card {
+  box-shadow: 0 2px 16px rgba(170, 0, 255, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+  backdrop-filter: none;
+  border-color: var(--accent-border);
 }

@@ -17,40 +17,31 @@ export function easeInOutCubic(t) {
     : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
-export function easeOutElastic(t) {
-  if (t === 0 || t === 1) return t;
-  return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1;
-}
-
-export function easeOutBounce(t) {
-  const n1 = 7.5625;
-  const d1 = 2.75;
-  if (t < 1 / d1) {
-    return n1 * t * t;
-  } else if (t < 2 / d1) {
-    return n1 * (t -= 1.5 / d1) * t + 0.75;
-  } else if (t < 2.5 / d1) {
-    return n1 * (t -= 2.25 / d1) * t + 0.9375;
-  } else {
-    return n1 * (t -= 2.625 / d1) * t + 0.984375;
-  }
+export function easeOutQuint(t) {
+  return 1 - Math.pow(1 - t, 5);
 }
 
 /**
  * Custom deceleration curve for the slot machine.
- * Starts fast, slows dramatically, then has a subtle "tease" near the end.
+ * Designed for ~25 slots of total decel distance:
+ *
+ *   0.0–0.45: Fast initial decel — blows through ~20 slots quickly
+ *   0.45–0.88: Long suspenseful crawl — ~4 names drift by slowly
+ *   0.88–1.0: Barely-moving final settle — <1 slot, eases to a stop
+ *
+ * All transitions are smooth (no bounces, no snaps).
  */
 export function slotDeceleration(t) {
-  if (t < 0.7) {
-    // Smooth deceleration for first 70%
-    return easeOutCubic(t / 0.7) * 0.85;
-  } else if (t < 0.85) {
-    // Near-stop tease zone (slow crawl)
-    const localT = (t - 0.7) / 0.15;
-    return 0.85 + localT * 0.1;
+  if (t < 0.45) {
+    // Fast decel: cover most of the distance quickly
+    return easeOutCubic(t / 0.45) * 0.8;
+  } else if (t < 0.88) {
+    // Suspenseful crawl: names drift by one at a time
+    const localT = (t - 0.45) / 0.43;
+    return 0.8 + easeOutCubic(localT) * 0.17;
   } else {
-    // Final snap to position
-    const localT = (t - 0.85) / 0.15;
-    return 0.95 + easeOutBounce(localT) * 0.05;
+    // Gentle final settle: barely any movement
+    const localT = (t - 0.88) / 0.12;
+    return 0.97 + easeOutQuint(localT) * 0.03;
   }
 }

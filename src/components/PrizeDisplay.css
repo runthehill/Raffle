@@ -7,18 +7,20 @@
 
 .prize-progress {
   font-size: 0.85rem;
-  color: var(--text-dimmed);
+  color: var(--neon-blue);
   text-transform: uppercase;
   letter-spacing: 3px;
   margin-bottom: 8px;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
 }
 
 .prize-label {
   font-family: var(--font-display);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   letter-spacing: 4px;
-  color: var(--neon-pink);
-  text-shadow: var(--glow-pink);
+  color: var(--neon-purple);
+  text-shadow: var(--glow-purple);
   margin-bottom: 8px;
 }
 
