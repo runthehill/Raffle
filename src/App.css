@@ -334,28 +334,34 @@ h1, h2, h3 {
     --glow-green: 0 0 6px #FF6B0066;
   }
 
-  /* Title — reduce filter glow */
-  .setup-title {
+  /* Title — reduce filter glow (theme-scoped to beat specificity) */
+  .setup-title,
+  [data-theme="light"] .setup-title,
+  [data-theme="sligo"] .setup-title {
     filter: none;
   }
 
   /* Labels — remove text-shadow entirely at small size */
-  .setup-label {
+  .setup-label,
+  [data-theme="sligo"] .setup-label {
     text-shadow: none;
   }
 
-  .setup-subtitle {
+  .setup-subtitle,
+  [data-theme="sligo"] .setup-subtitle {
     text-shadow: none;
   }
 
   /* Prize display */
   .prize-progress,
-  .prize-label {
+  .prize-label,
+  [data-theme="sligo"] .prize-label {
     text-shadow: none;
   }
 
   /* History sidebar */
-  .history-round {
+  .history-round,
+  [data-theme="sligo"] .history-round {
     text-shadow: none;
   }
 
@@ -364,8 +370,10 @@ h1, h2, h3 {
     filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
   }
 
-  /* Slot machine lights — subtler */
-  .slot-light {
+  /* Slot machine lights — subtler (theme-scoped) */
+  .slot-light,
+  [data-theme="light"] .slot-light,
+  [data-theme="sligo"] .slot-light {
     box-shadow: 0 0 3px hsl(var(--light-hue, 45), 100%, 60%);
   }
 }
