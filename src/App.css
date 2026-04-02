@@ -308,6 +308,68 @@ h1, h2, h3 {
   }
 }
 
+/* === Mobile: reduce glow effects for readability === */
+@media (max-width: 600px) {
+  :root {
+    --glow-gold: 0 0 6px #FFD70066;
+    --glow-pink: 0 0 6px #FF2D7866;
+    --glow-blue: 0 0 6px #00E5FF66;
+    --glow-purple: 0 0 6px #BF40FF66;
+    --glow-green: 0 0 6px #39FF1466;
+  }
+
+  [data-theme="light"] {
+    --glow-gold: 0 1px 4px rgba(230, 168, 0, 0.15);
+    --glow-pink: 0 1px 4px rgba(233, 30, 114, 0.12);
+    --glow-blue: 0 1px 4px rgba(0, 145, 234, 0.12);
+    --glow-purple: 0 1px 4px rgba(170, 0, 255, 0.1);
+    --glow-green: 0 1px 4px rgba(0, 200, 83, 0.12);
+  }
+
+  [data-theme="sligo"] {
+    --glow-gold: 0 0 6px #FF6B0066;
+    --glow-pink: 0 0 6px #FF8C3866;
+    --glow-blue: none;
+    --glow-purple: 0 0 6px #FF6B0066;
+    --glow-green: 0 0 6px #FF6B0066;
+  }
+
+  /* Title — reduce filter glow */
+  .setup-title {
+    filter: none;
+  }
+
+  /* Labels — remove text-shadow entirely at small size */
+  .setup-label {
+    text-shadow: none;
+  }
+
+  .setup-subtitle {
+    text-shadow: none;
+  }
+
+  /* Prize display */
+  .prize-progress,
+  .prize-label {
+    text-shadow: none;
+  }
+
+  /* History sidebar */
+  .history-round {
+    text-shadow: none;
+  }
+
+  /* Winner modal — keep glow but lighter */
+  .winner-label {
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
+  }
+
+  /* Slot machine lights — subtler */
+  .slot-light {
+    box-shadow: 0 0 3px hsl(var(--light-hue, 45), 100%, 60%);
+  }
+}
+
 /* ========================================
    SLIGO ALL STARS — Component Overrides
    ======================================== */
