@@ -2,6 +2,7 @@ import React, { useMemo, useEffect, useRef, useCallback } from 'react';
 import useSlotAnimation from '../hooks/useSlotAnimation';
 import useAudio from '../hooks/useAudio';
 import { shuffle } from '../utils/shuffle';
+import { IDEAL_LANDING } from '../animationConstants';
 import './SlotMachine.css';
 
 const VISIBLE_SLOTS = 5;
@@ -21,22 +22,12 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
       return { reelNames: [], targetIndex: 0 };
     }
 
-    // Calculate where the animation will land (must match useSlotAnimation constants).
-    const ANIM_MAX_SPEED = 35;
-    const ANIM_SLOT_H = 80;
-    const ANIM_SPINUP_MS = 400;
-    const ANIM_CRUISE_MS = 2100;
-    const DECEL_SLOTS = 25;
-    const spinUpDist = ANIM_MAX_SPEED * ANIM_SLOT_H * (ANIM_SPINUP_MS / 1000) * 0.5;
-    const cruiseDist = ANIM_MAX_SPEED * ANIM_SLOT_H * (ANIM_CRUISE_MS / 1000);
-    const preDecelSlots = Math.ceil((spinUpDist + cruiseDist) / ANIM_SLOT_H);
-    const idealLanding = preDecelSlots + DECEL_SLOTS;
-
     // Reel must be longer than the animation's max scroll position so it never
     // wraps around. Wrapping caused duplicate names at the seam. With a long
     // enough reel and the pool-based dedup below, every visible 5-slot window
-    // is guaranteed unique.
-    const totalSlots = Math.max(idealLanding + VISIBLE_SLOTS + 1, names.length * REEL_REPEATS);
+    // is unique when there are at least VISIBLE_SLOTS unique names (very small
+    // name lists may still produce duplicates by design).
+    const totalSlots = Math.max(IDEAL_LANDING + VISIBLE_SLOTS + 1, names.length * REEL_REPEATS);
     let reel = [];
     let pool = [];
 
@@ -57,7 +48,7 @@ export default function SlotMachine({ names, winner, isSpinning, spinKey, onSpin
       }
     }
 
-    const targetIdx = idealLanding;
+    const targetIdx = IDEAL_LANDING;
     if (winner && targetIdx < reel.length) {
       reel[targetIdx] = winner;
       // Clear any duplicates of the winner within the visible window around landing
