@@ -1,6 +1,6 @@
 {
   "name": "raffle-winner-picker",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Fun raffle winner picker with slot machine animation.",
   "private": true,
   "scripts": {
