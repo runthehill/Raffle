@@ -1,7 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { easeInCubic } from '../utils/easing';
-
-const SLOT_HEIGHT = 80; // px per name slot
+import {
+  SLOT_HEIGHT, MAX_SPEED, SPIN_UP_DURATION, CRUISE_DURATION,
+  DECEL_DURATION, TOTAL_DURATION, DECEL_SLOTS, PRE_DECEL_SLOTS,
+} from '../animationConstants';
 
 /**
  * Custom hook that drives the slot machine reel animation.
@@ -23,13 +25,6 @@ export default function useSlotAnimation({ totalItems, targetIndex, onComplete }
   const startTimeRef = useRef(0);
   const isRunning = useRef(false);
 
-  // Animation constants
-  const SPIN_UP_DURATION = 400;
-  const CRUISE_DURATION = 2100;
-  const DECEL_DURATION = 3000;
-  const TOTAL_DURATION = SPIN_UP_DURATION + CRUISE_DURATION + DECEL_DURATION;
-  const MAX_SPEED = 35; // slots per second at full speed
-
   const start = useCallback(() => {
     if (isRunning.current) return;
     isRunning.current = true;
@@ -39,11 +34,8 @@ export default function useSlotAnimation({ totalItems, targetIndex, onComplete }
     const spinUpDist = MAX_SPEED * SLOT_HEIGHT * (SPIN_UP_DURATION / 1000) * 0.5;
     const cruiseDist = MAX_SPEED * SLOT_HEIGHT * (CRUISE_DURATION / 1000);
     const preDecelDist = spinUpDist + cruiseDist;
-    const preDecelSlots = Math.ceil(preDecelDist / SLOT_HEIGHT);
 
-    // Must match DECEL_SLOTS in SlotMachine.jsx
-    const DECEL_TARGET_SLOTS = 25;
-    const minLandingSlot = preDecelSlots + DECEL_TARGET_SLOTS;
+    const minLandingSlot = PRE_DECEL_SLOTS + DECEL_SLOTS;
 
     let landingSlot = targetIndex;
     while (landingSlot < minLandingSlot) {
@@ -55,9 +47,6 @@ export default function useSlotAnimation({ totalItems, targetIndex, onComplete }
 
     // Power-curve exponent: computed so the curve's initial velocity
     // exactly matches cruise speed. No speed discontinuity.
-    //   d/dt[1 - (1-t)^p] at t=0 = p
-    //   velocity = remainingDist * p / DECEL_DURATION = cruiseVelocity
-    //   p = cruiseVelocity * DECEL_DURATION / remainingDist
     const cruiseVel = MAX_SPEED * SLOT_HEIGHT; // px/sec
     const p = Math.max(2, cruiseVel * (DECEL_DURATION / 1000) / remainingDist);
 
@@ -95,10 +84,6 @@ export default function useSlotAnimation({ totalItems, targetIndex, onComplete }
         currentOffset = preDecelDist + remainingDist * progress;
 
         // Additive teeter: damped oscillation in the last 30% of decel.
-        // The product sin(3πt)·sin(πt) guarantees zero offset AND zero
-        // velocity at both boundaries, so no discontinuities.
-        // The reel drifts ~0.5 slots past the winner, back ~0.5 the
-        // other way, and settles — a natural "deciding" wobble.
         const TEETER_START = 0.7;
         if (decelT > TEETER_START) {
           const tT = (decelT - TEETER_START) / (1 - TEETER_START);
