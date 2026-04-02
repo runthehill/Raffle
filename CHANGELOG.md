@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] - 2026-04-02
+
+### Added
+- **GitHub Pages deployment** — GitHub Actions workflow builds, tests, and deploys to Pages on push to main
+- **`qa` branch workflow** — development happens on `qa`, merged to `main` via PR for releases
+
+### Fixed
+- **Logo paths on GitHub Pages** — use `import.meta.env.BASE_URL` prefix so logos resolve on subpath deployments
+- **Duplicate names in reel** — reel builder now ensures no name appears within the visible 5-slot window of itself, fixing trust issue with small participant lists
+- **Mobile readability** — reduced heavy multi-layer text-shadow glows to single subtle layers on screens under 600px; removed glow from form labels and subtitles entirely
+- **Workflow permissions** — scoped `pages: write` and `id-token: write` to deploy job only; gated `workflow_dispatch` deploys to `main` branch
+
 ## [1.0.1] - 2026-04-01
 
 ### Added
