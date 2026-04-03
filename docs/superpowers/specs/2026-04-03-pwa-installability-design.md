@@ -33,7 +33,7 @@ VitePWA({
     theme_color: '#080415',
     background_color: '#080415',
     display: 'standalone',
-    start_url: '/',
+    start_url: './',
     icons: [
       { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
       { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
@@ -46,7 +46,7 @@ VitePWA({
 
 Add to `<head>`:
 - `<meta name="theme-color" content="#080415">`
-- `<link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png">`
+- `<link rel="apple-touch-icon" href="./apple-touch-icon-180x180.png">`
 
 The plugin handles injecting `<link rel="manifest">` and the service worker registration script automatically.
 

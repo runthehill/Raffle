@@ -138,7 +138,7 @@ export default defineConfig({
         theme_color: '#080415',
         background_color: '#080415',
         display: 'standalone',
-        start_url: '/',
+        start_url: './',
         icons: [
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512x512.png', sizes: '512x512', type: 'image/png' },
@@ -186,7 +186,7 @@ In `index.html`, add these two lines immediately after the existing `<link rel="
 
 ```html
     <meta name="theme-color" content="#080415" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon-180x180.png" />
 ```
 
 The full `<head>` should now read:
@@ -195,9 +195,9 @@ The full `<head>` should now read:
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="theme-color" content="#080415" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon-180x180.png" />
     <title>Jonathan's Raffle Winner Picker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
